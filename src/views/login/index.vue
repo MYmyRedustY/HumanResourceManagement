@@ -128,17 +128,17 @@ export default {
         try {
           if (valid) {
             this.loading = true
-            console.log(this.$store)
+            // console.log(this.$store)
             await this.$store.dispatch('user/login', this.loginForm)
             this.$router.push('/')
-            console.log(this.$router)
+            // console.log(this.$router)
             this.loading = false
           } else {
             console.log('error submit!!')
             return false
           }
         } catch (error) {
-          console.log(error)
+          // console.log(error)
         } finally {
           this.loading = false
         }

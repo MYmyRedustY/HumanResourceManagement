@@ -98,11 +98,12 @@
 
 // 先引入
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 
 // 状态
 const state = {
-  token: getToken() || '' // 设置token初始状态
+  token: getToken() || '', // 设置token初始状态
+  userInfo: {} // 定义一个空的对象，不是null，如果这里是null，在下边取出来赋值的时候就会报错
 }
 // 修改状态
 const mutations = {
@@ -116,6 +117,14 @@ const mutations = {
   removeToken(state) {
     state.token = null // 删除vuex的token
     removeToken() // 先清除 vuex  再清除缓存 vuex和 缓存数据的同步
+  },
+  // 设置用户信息
+  setUserInfo(state, userInfo) {
+    state.userInfo = { ...userInfo } // 用浅拷贝的方式赋值，会触发视图的更新
+  },
+  // 删除用户信息
+  removeUserInfo(state) {
+    state.userInfo = {}
   }
 }
 // 执行异步
@@ -129,6 +138,12 @@ const actions = {
     // 返回token ，把token放进本地存储
     context.commit('setToken', res)
     // }
+  },
+  // 获取用户资料
+  async getUserInfo(context) {
+    const result = await getUserInfo() // 获取返回值
+    context.commit('setUserInfo', result) // 将整个用户数据设置到vuex数据中
+    return result // 伏笔
   }
 }
 

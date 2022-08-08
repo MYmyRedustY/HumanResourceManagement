@@ -84,15 +84,30 @@
 
 // export default service
 
+import { config } from "@vue/test-utils"
 import axios from "axios"
 import { Message } from "element-ui" // 引入提醒组件
+import store from '@/store'
 const service = axios.create({
     // process 是node.js里的一个全局变量，进程
     baseURL: process.env.VUE_APP_BASE_API,
     timeout: 5000
 })
 // 请求拦截器
-service.interceptors.request.use()
+service.interceptors.request.use(
+    config => {
+        console.log(store);
+        // 统一注入token
+        if (store.getters.token) {
+            // 如果token存在 注入token
+            config.headers['Authorization'] = `Bearer ${store.getters.token}`
+        }
+        return config // 必须返回配置
+    },
+    error => {
+        return Promise.reject(error)
+    }
+)
 // 响应拦截器
 service.interceptors.response.use(
     // 杨文林有云:尽量不要在拦截器里解构返回,而是在看见返回数据之后再进行解构
@@ -108,6 +123,7 @@ service.interceptors.response.use(
         }
     },
     (err) => {
+        console.log(err);
         Message.error(err.message) // 提示错误信息
         return Promise.reject(err) // 返回执行错误，让当前的执行立案调处成功，直接进入catch。
         // 用 Promise 对象的静态方法 reject 
