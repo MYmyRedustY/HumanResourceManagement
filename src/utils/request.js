@@ -85,10 +85,33 @@
 // export default service
 
 import axios from "axios"
-const service = axios.create()
+import { Message } from "element-ui" // 引入提醒组件
+const service = axios.create({
+    // process 是node.js里的一个全局变量，进程
+    baseURL: process.env.VUE_APP_BASE_API,
+    timeout: 5000
+})
 // 请求拦截器
 service.interceptors.request.use()
 // 响应拦截器
-service.interceptors.response.use()
+service.interceptors.response.use(
+    // 杨文林有云:尽量不要在拦截器里解构返回,而是在看见返回数据之后再进行解构
+    (response) => {
+        // axios默认加了一层data
+        const { success, message, data } = response.data
+        if (success) {
+            return data
+        } else {
+            // 业务错了，不能再进 .then ,而要进 .catch
+            Message.error(err.message) // 提示错误信息
+            return Promise.reject(new Error(message))
+        }
+    },
+    (err) => {
+        Message.error(err.message) // 提示错误信息
+        return Promise.reject(err) // 返回执行错误，让当前的执行立案调处成功，直接进入catch。
+        // 用 Promise 对象的静态方法 reject 
+    }
+)
 
 export default service

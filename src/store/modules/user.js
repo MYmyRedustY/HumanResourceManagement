@@ -95,9 +95,46 @@
 //   actions
 // }
 
+
+// 先引入
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login } from '@/api/user'
+
+// 状态
+const state = {
+  token: getToken() || '' // 设置token初始状态
+}
+// 修改状态
+const mutations = {
+  // 设置token
+  setToken(state, token) {
+    state.token = token // 设置token  只是修改state的数据  123 =》 1234
+    // vuex变化 => 缓存数据
+    setToken(token) // vuex和 缓存数据的同步
+  },
+  // 删除缓存
+  removeToken(state) {
+    state.token = null // 删除vuex的token
+    removeToken() // 先清除 vuex  再清除缓存 vuex和 缓存数据的同步
+  }
+}
+// 执行异步
+const actions = {
+  // 定义login发送请求，需要的参数是表单的参数
+  async login(context, data) {
+    const res = await login(data)  // axios返回一个Promise对象
+    console.log(res);
+    // 如果请求成功
+    // if (res.data.success) {
+    // 返回token ，把token放进本地存储
+    context.commit('setToken', res)
+    // }
+  }
+}
+
 export default {
   namespaced: true,
-  state: {},
-  mutations: {},
-  actions: {}
+  state,
+  mutations,
+  actions
 }
