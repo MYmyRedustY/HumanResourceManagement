@@ -45,9 +45,10 @@
         height: calc(100% - 50px);
       }
 
-      // .el-scrollbar__wrap {
-      //   overflow-y: auto;
-      // }
+      // 侧边栏y轴进度条
+      .el-scrollbar__wrap {
+        overflow-y: auto;
+      }
     }
 
     .is-horizontal {
