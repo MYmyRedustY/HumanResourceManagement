@@ -72,7 +72,7 @@
 <script>
 import { validMobile } from '@/utils/validate'
 // 引入vuex
-import { mapActions } from 'vuex'
+// import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data() {
@@ -106,7 +106,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -124,7 +124,7 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(async (valid) => {
+      this.$refs.loginForm.validate(async(valid) => {
         try {
           if (valid) {
             this.loading = true

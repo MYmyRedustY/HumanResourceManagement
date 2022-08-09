@@ -95,10 +95,9 @@
 //   actions
 // }
 
-
 // 先引入
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
 
 // 状态
 const state = {
@@ -131,8 +130,7 @@ const mutations = {
 const actions = {
   // 定义login发送请求，需要的参数是表单的参数
   async login(context, data) {
-    const res = await login(data)  // axios返回一个Promise对象
-    console.log(res);
+    const res = await login(data) // axios返回一个Promise对象
     // 如果请求成功
     // if (res.data.success) {
     // 返回token ，把token放进本地存储
@@ -142,8 +140,19 @@ const actions = {
   // 获取用户资料
   async getUserInfo(context) {
     const result = await getUserInfo() // 获取返回值
-    context.commit('setUserInfo', result) // 将整个用户数据设置到vuex数据中
-    return result // 伏笔
+    // 获取头像
+    const res = await getUserDetailById(result.userId)
+    // 合并数据
+    const baseResult = { ...result, ...res }
+    context.commit('setUserInfo', baseResult) // 将整个用户数据设置到vuex数据中
+    return baseResult // 伏笔
+  },
+  // 登出的action
+  logout(context) {
+    // 删除token
+    context.commit('removeToken') // 不仅仅删除了vuex中的 还删除了缓存中的
+    // 删除用户资料
+    context.commit('removeUserInfo') // 删除用户信息
   }
 }
 

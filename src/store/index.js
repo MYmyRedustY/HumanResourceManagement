@@ -6,7 +6,7 @@ import settings from './modules/settings'
 import user from './modules/user'
 
 Vue.use(Vuex)
-
+Vue.config.devtools = true // devtools能观测到vuex
 const store = new Vuex.Store({
   modules: {
     app,
