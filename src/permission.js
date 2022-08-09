@@ -87,7 +87,7 @@ router.beforeEach(async(to, from, next) => {
         // 如果没有id这个值 才会调用 vuex的获取资料的action
         await store.dispatch('user/getUserInfo')
       }
-      console.log(store)
+      // console.log(store)
       // 有token不去登录页，就放行
       next()
     }
@@ -97,7 +97,7 @@ router.beforeEach(async(to, from, next) => {
 
     if (whiteList.indexOf(to.path) !== -1) {
       // 去白名单，就放行
-      console.log(to.path)
+      // console.log(to.path)
       next()
     } else {
       // 不去白名单，就强制跳转到登录页
