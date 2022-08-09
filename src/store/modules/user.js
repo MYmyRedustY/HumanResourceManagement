@@ -136,6 +136,8 @@ const actions = {
     // 返回token ，把token放进本地存储
     context.commit('setToken', res)
     // }
+    // 写入时间戳
+    setTimeStamp() // 将当前的最新时间写入缓存
   },
   // 获取用户资料
   async getUserInfo(context) {
