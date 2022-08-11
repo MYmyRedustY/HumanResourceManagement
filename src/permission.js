@@ -93,8 +93,7 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     // 无token，判断是不是去白名单里的页面
-    console.log(whiteList.indexOf(to.path) !== -1)
-
+    // console.log(whiteList.indexOf(to.path) !== -1)
     if (whiteList.indexOf(to.path) !== -1) {
       // 去白名单，就放行
       // console.log(to.path)
