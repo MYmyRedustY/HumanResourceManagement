@@ -122,7 +122,6 @@ export function param2Obj(url) {
  *  遍历树形 有一个重点 要先找一个头儿
  * ***/
 export function tranListToTreeData(list, rootValue) {
-  debugger
   var arr = []
   list.forEach(item => {
     if (item.pid === rootValue) {
