@@ -77,7 +77,7 @@ export default {
   },
   data() {
     // 检查部门名称是否重复
-    const checkNameRepeat = async(rule, value, callback) => {
+    const checkNameRepeat = async (rule, value, callback) => {
       // 首先获取最新的组织架构数据
       const { depts } = await getDepartmentsApi()
       // depts 是所有部门的数据
@@ -88,7 +88,7 @@ export default {
       isRepeat ? callback(new Error(`同级部门已经有${value}了`)) : callback
     }
     // 检查部门编码是否重复
-    const checkCodeRepeat = async(rule, value, callback) => {
+    const checkCodeRepeat = async (rule, value, callback) => {
       // 首先获取最新的组织架构数据
       const { depts } = await getDepartmentsApi()
       // depts 是所有部门的数据
@@ -166,7 +166,7 @@ export default {
       this.peoples = await getEmployeeSimpleApi()
     },
     btnOK() {
-      this.$refs.deptForm.validate(async(isOK) => {
+      this.$refs.deptForm.validate(async (isOK) => {
         if (isOK) {
           // 验证通过了就说明可以提交了
           await addDepartmentsApi({ ...this.formData, pid: this.treeNode.id })
@@ -183,12 +183,12 @@ export default {
     },
     btnCancel() {
       // 重置数据  因为resetFields 只能重置 表单上的数据 非表单上的 比如 编辑中id 不能重置
-      this.formData = {
-        name: '',
-        code: '',
-        manager: '',
-        introduce: ''
-      }
+      // this.formData = {
+      //   name: '',
+      //   code: '',
+      //   manager: '',
+      //   introduce: ''
+      // }
       this.showTitle = '新增子部门'
       // 关闭弹层
       this.$emit('update:showDialog', false)
