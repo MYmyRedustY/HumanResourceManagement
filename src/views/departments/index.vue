@@ -16,12 +16,14 @@
             :tree-node="data"
             @delDepts="getDepartments"
             @addDepts="addDepts"
+            @editDepts="editDepts"
           />
           <!-- 传入内容 插槽内容 会循环多次 有多少节点 就循环多少次 -->
           <!-- 作用域插槽 slot-scope="obj" 接收传递给插槽的数据   data 每个节点的数据对象-->
         </el-tree>
         <!-- 新增部门的弹窗 -->
         <add-dept
+          ref="addDept"
           :show-dialog="showDialog"
           :tree-node="node"
           :showDialog.sync="showDialog"
@@ -68,6 +70,14 @@ export default {
       this.showDialog = true
       // node是点击的当前的部门，这个部门应该记录下来，等会用来提交数据
       this.node = node
+    },
+    editDepts(node) {
+      // 先打开弹层
+      this.showDialog = true
+      // 把操作节点变成当前节点
+      this.node = node
+      // 触发弹窗组件的获取当前节点完整数据的方法
+      this.$refs.addDept.getDepartDetail(node.id)
     }
   }
 }

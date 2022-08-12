@@ -36,3 +36,12 @@ export function addDepartmentsApi(data) {
     data
   })
 }
+
+/** *
+ * 获取部门详情
+ * ***/
+export function getDepartDetailApi(id) {
+  return request({
+    url: `/company/department/${id}`
+  })
+}

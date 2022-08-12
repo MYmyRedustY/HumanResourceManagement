@@ -65,6 +65,8 @@ export default {
         this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         // 修改部门
+        // 点击以后触发父组件的修改功能
+        this.$emit('editDepts', this.treeNode)
       } else {
         // 删除部门
         this.$confirm('你真的要删除这个部门吗')
