@@ -38,14 +38,16 @@
                     size="small"
                     type="primary"
                     @click="editRole(row.id)"
-                    >编辑</el-button
                   >
+                    编辑
+                  </el-button>
                   <el-button
                     size="small"
                     type="danger"
                     @click="deleteRole(row.id)"
-                    >删除</el-button
                   >
+                    删除
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -128,10 +130,10 @@
         label-width="120px"
       >
         <el-form-item label="角色名称" prop="name">
-          <el-input v-model.trim="roleForm.name"></el-input>
+          <el-input v-model.trim="roleForm.name" />
         </el-form-item>
         <el-form-item label="角色描述">
-          <el-input v-model="roleForm.description"></el-input>
+          <el-input v-model="roleForm.description" />
         </el-form-item>
       </el-form>
       <!-- footer插槽 -->
