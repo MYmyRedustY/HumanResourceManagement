@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="showTitle" :visible="showDialog" @close="btnCancel">
+  <el-dialog
+    :title="showTitle"
+    :visible="showDialog"
+    @close="btnCancel"
+    @closed="showTitle = '新增子部门'"
+  >
     <!-- 表单数据 -->
     <el-form
       ref="deptForm"
@@ -60,7 +65,8 @@
 import {
   getDepartmentsApi,
   addDepartmentsApi,
-  getDepartDetailApi
+  getDepartDetailApi,
+  updateDepartmentsApi
 } from '@/api/departments'
 import { getEmployeeSimpleApi } from '@/api/employees'
 export default {
@@ -77,22 +83,41 @@ export default {
   },
   data() {
     // 检查部门名称是否重复
-    const checkNameRepeat = async (rule, value, callback) => {
+    const checkNameRepeat = async(rule, value, callback) => {
       // 首先获取最新的组织架构数据
       const { depts } = await getDepartmentsApi()
-      // depts 是所有部门的数据
-      const isRepeat = depts
-        .filter((item) => item.pid === this.treeNode)
-        .some((item) => item.name === value)
+      let isRepeat = false
+      if (this.formData.id) {
+        // 修改时，不能和同级部门的名字重合
+        isRepeat = depts
+          .filter(
+            (item) => item.pid === this.treeNode.pid && item.id !== this.treeNode.id
+          )
+          .some((item) => item.name === value)
+      } else {
+        // depts 是所有部门的数据
+        isRepeat = depts
+          .filter((item) => item.pid === this.treeNode)
+          .some((item) => item.name === value)
+      }
+
       // 如果有重复就报错，没有就通过
       isRepeat ? callback(new Error(`同级部门已经有${value}了`)) : callback
     }
     // 检查部门编码是否重复
-    const checkCodeRepeat = async (rule, value, callback) => {
+    const checkCodeRepeat = async(rule, value, callback) => {
       // 首先获取最新的组织架构数据
       const { depts } = await getDepartmentsApi()
-      // depts 是所有部门的数据
-      const isRepeat = depts.some((item) => item.code === value)
+      let isRepeat = false
+      if (this.formData.id) {
+        isRepeat = depts.some(
+          (item) => item.code === value && item.id !== this.treeNode.id
+        )
+      } else {
+        // depts 是所有部门的数据
+        isRepeat = depts.some((item) => item.code === value)
+      }
+
       // 如果有重复就报错，没有就通过
       isRepeat
         ? callback(new Error(`组织架构中已经有部门使用${value}编码`))
@@ -166,10 +191,16 @@ export default {
       this.peoples = await getEmployeeSimpleApi()
     },
     btnOK() {
-      this.$refs.deptForm.validate(async (isOK) => {
+      this.$refs.deptForm.validate(async(isOK) => {
         if (isOK) {
-          // 验证通过了就说明可以提交了
-          await addDepartmentsApi({ ...this.formData, pid: this.treeNode.id })
+          if (this.formData.id) {
+            // 编辑模式
+            console.log(this.formData)
+            await updateDepartmentsApi(this.formData)
+          } else {
+            // 验证通过了就说明可以提交了
+            await addDepartmentsApi({ ...this.formData, pid: this.treeNode.id })
+          }
           // 请求成功后提醒父组件更新数据
           this.$emit('addDepts')
           // 关闭弹窗页面
@@ -189,7 +220,6 @@ export default {
       //   manager: '',
       //   introduce: ''
       // }
-      this.showTitle = '新增子部门'
       // 关闭弹层
       this.$emit('update:showDialog', false)
       // 清除之前的校验,只能重置定义在data中的数据，因此需要手动重置

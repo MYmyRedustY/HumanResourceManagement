@@ -45,3 +45,15 @@ export function getDepartDetailApi(id) {
     url: `/company/department/${id}`
   })
 }
+
+/**
+ * 编辑部门
+ *
+ * ***/
+export function updateDepartmentsApi(data) {
+  return request({
+    url: `/company/department/${data.id}`,
+    method: 'put',
+    data
+  })
+}
