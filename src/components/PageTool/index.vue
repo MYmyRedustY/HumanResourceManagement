@@ -1,10 +1,10 @@
 <template>
-  <el-card>
+  <el-card class="page-tools">
     <el-row type="flex" justify="space-between" align="middle">
       <el-col>
         <!-- 前插槽 -->
         <div v-if="showBefore" class="before">
-          <i class="el-icon-info"></i>
+          <i class="el-icon-info" />
           <slot name="before" />
         </div>
       </el-col>
