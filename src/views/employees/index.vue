@@ -11,7 +11,9 @@
           >
             excel导入
           </el-button>
-          <el-button size="small" type="danger">excel导出</el-button>
+          <el-button size="small" type="danger" @click="exportData">
+            excel导出
+          </el-button>
           <el-button size="small" type="primary" @click="showDialog = true">
             新增员工
           </el-button>
@@ -133,6 +135,68 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    exportData() {
+      // 表头对应关系
+      const headers = {
+        姓名: 'username',
+        手机号: 'mobile',
+        入职日期: 'timeOfEntry',
+        聘用形式: 'formOfEmployment',
+        转正日期: 'correctionTime',
+        工号: 'workNumber',
+        部门: 'departmentName'
+      }
+
+      import('@/vendor/Export2Excel').then(async (excel) => {
+        // 导出数据需要请求来
+        const { rows } = await getEmployeeListApi({
+          page: 1,
+          size: this.page.total
+        })
+        const data = this.formatJson(headers, rows)
+        excel.export_json_to_excel({
+          header: Object.keys(headers), // 表头 必填
+          data, // 具体数据 必填
+          filename: 'excel-list', // 非必填
+          autoWidth: true, // 非必填
+          bookType: 'xlsx' // 非必填
+        })
+      })
+    },
+    // 将表头和数据进行对应
+    formatJson(headers, rows) {
+      return rows.map((item) => {
+        // item 是一个一个对象
+        // 格式：["手机", "姓名", "入职日期",...]
+        return Object.keys(headers).map((key) => {
+          if (
+            headers[key] === 'timeOfEntry' ||
+            headers[key] === 'correctionTime'
+          ) {
+            return this.formatDate(item[headers[key]]) // 返回格式化之前的时间
+          } else if (headers[key] === 'formOfEmployment') {
+            var en = EmployeeEnum.hireType.find(
+              (obj) => obj.id === item[headers[key]]
+            )
+            return en ? en.value : '未知'
+          }
+          return item[headers[key]]
+        })
+      })
+    },
+    formatDate(dat) {
+      const time = new Date(dat)
+      const year = time.getFullYear() + ''
+      const month = time.getMonth() + 1 + ''
+      const date = time.getDate() - 1 + ''
+      return (
+        year +
+        '.' +
+        (month < 10 ? '0' + month : month) +
+        '.' +
+        (date < 10 ? '0' + date : date)
+      )
     }
   }
 }

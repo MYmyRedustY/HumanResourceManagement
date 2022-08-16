@@ -16,11 +16,11 @@ export default {
     async success({ header, results }) {
       if (this.type === 'user') {
         const userRelations = {
-          入职日期: 'timeOfEntry',
-          手机号: 'mobile',
-          姓名: 'username',
-          转正日期: 'correctionTime',
-          工号: 'workNumber'
+          '入职日期': 'timeOfEntry',
+          '手机号': 'mobile',
+          '姓名': 'username',
+          '转正日期': 'correctionTime',
+          '工号': 'workNumber'
         }
         const arr = []
         // 遍历所有的数组
