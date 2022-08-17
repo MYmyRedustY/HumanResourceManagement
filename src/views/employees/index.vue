@@ -48,7 +48,13 @@
           </el-table-column>
           <el-table-column label="操作" sortable="" fixed="right" width="280">
             <template v-slot="{ row }">
-              <el-button type="text" size="small">查看</el-button>
+              <el-button
+                type="text"
+                size="small"
+                @click="$router.push(`/employees/detail/${row.id}`)"
+              >
+                查看
+              </el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
@@ -85,6 +91,7 @@
 import { getEmployeeListApi, delEmployeeApi } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee'
+import { formatDate } from '@/filters'
 export default {
   components: {
     AddEmployee
@@ -139,16 +146,16 @@ export default {
     exportData() {
       // 表头对应关系
       const headers = {
-        姓名: 'username',
-        手机号: 'mobile',
-        入职日期: 'timeOfEntry',
-        聘用形式: 'formOfEmployment',
-        转正日期: 'correctionTime',
-        工号: 'workNumber',
-        部门: 'departmentName'
+        '姓名': 'username',
+        '手机号': 'mobile',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
       }
 
-      import('@/vendor/Export2Excel').then(async (excel) => {
+      import('@/vendor/Export2Excel').then(async(excel) => {
         // 导出数据需要请求来
         const { rows } = await getEmployeeListApi({
           page: 1,
@@ -174,7 +181,7 @@ export default {
             headers[key] === 'timeOfEntry' ||
             headers[key] === 'correctionTime'
           ) {
-            return this.formatDate(item[headers[key]]) // 返回格式化之前的时间
+            return formatDate(item[headers[key]]) // 返回格式化之前的时间
           } else if (headers[key] === 'formOfEmployment') {
             var en = EmployeeEnum.hireType.find(
               (obj) => obj.id === item[headers[key]]
@@ -184,19 +191,6 @@ export default {
           return item[headers[key]]
         })
       })
-    },
-    formatDate(dat) {
-      const time = new Date(dat)
-      const year = time.getFullYear() + ''
-      const month = time.getMonth() + 1 + ''
-      const date = time.getDate() - 1 + ''
-      return (
-        year +
-        '.' +
-        (month < 10 ? '0' + month : month) +
-        '.' +
-        (date < 10 ? '0' + date : date)
-      )
     }
   }
 }
