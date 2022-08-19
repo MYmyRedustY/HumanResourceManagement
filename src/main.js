@@ -46,6 +46,9 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
+import Print from 'vue-print-nb'
+Vue.use(Print) // 注册导入上传组件
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
