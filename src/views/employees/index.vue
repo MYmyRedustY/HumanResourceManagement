@@ -75,7 +75,9 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="editRole(row.id)"
+                >角色</el-button
+              >
               <el-button type="text" size="small" @click="delEmployee(row.id)">
                 删除
               </el-button>
@@ -110,6 +112,11 @@
         <canvas ref="myCanvas" />
       </el-row>
     </el-dialog>
+    <assign-role
+      ref="assignRole"
+      :show-role-dialog.sync="showRoleDialog"
+      :user-id="userId"
+    />
   </div>
 </template>
 
@@ -119,10 +126,12 @@ import EmployeeEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee'
 import { formatDate } from '@/filters'
 import QrCode from 'qrcode'
+import AssignRole from './components/assign-role.vue'
 export default {
   name: 'EmployeeIndex',
   components: {
-    AddEmployee
+    AddEmployee,
+    AssignRole
   },
   data() {
     return {
@@ -134,7 +143,10 @@ export default {
       },
       loading: false,
       showDialog: false,
-      showCodeDialog: false
+      showCodeDialog: false,
+      showRoleDialog: false,
+      // 定义一个user-id‘
+      userId: null
     }
   },
   created() {
@@ -184,7 +196,7 @@ export default {
         部门: 'departmentName'
       }
 
-      import('@/vendor/Export2Excel').then(async(excel) => {
+      import('@/vendor/Export2Excel').then(async (excel) => {
         // 导出数据需要请求来
         const { rows } = await getEmployeeListApi({
           page: 1,
@@ -233,6 +245,11 @@ export default {
       } else {
         this.$message.warning('该用户还未上传头像')
       }
+    },
+    async editRole(id) {
+      this.userId = id // props传值 是异步的
+      await this.$refs.assignRole.getUserDetailById(id) // 父组件调用子组件方法
+      this.showRoleDialog = true
     }
   }
 }
