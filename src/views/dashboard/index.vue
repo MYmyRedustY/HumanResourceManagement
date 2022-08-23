@@ -5,11 +5,16 @@
       <div>
         <div class="fl headL">
           <div class="headImg">
-            <img src="@/assets/common/head.jpg" />
+            <img v-imagerror="defaultImg" :src="userInfo.staffPhoto" />
           </div>
           <div class="headInfoTip">
-            <p class="firstChild">早安，管理员，祝你开心每一天！</p>
-            <p class="lastChild">早安，管理员，祝你开心每一天！</p>
+            <p class="firstChild">
+              早安，{{ userInfo.name }}，祝你开心每一天！
+            </p>
+            <p class="lastChild">
+              {{ userInfo.name }} | {{ userInfo.companyName }} -
+              {{ userInfo.departmentName }}
+            </p>
           </div>
         </div>
         <div class="fr" />
@@ -25,6 +30,7 @@
             <span>工作日历</span>
           </div>
           <!-- 放置日历组件 -->
+          <work-calendar />
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -93,6 +99,7 @@
             <span>绩效指数</span>
           </div>
           <!-- 放置雷达图 -->
+          <radar />
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">
@@ -128,20 +135,32 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('user')
+// #region 引入方式
+// import { createNamespacedHelpers } from 'vuex'
+// const { mapState } = createNamespacedHelpers('user')
+import { mapState } from 'vuex'
+// #endregion
+import WorkCalendar from './components/work-calendar.vue'
+import Radar from './components/radar'
+
 export default {
   name: 'Dashboard',
+  components: {
+    WorkCalendar,
+    Radar
+  },
+
   data() {
     return {
       defaultImg: require('@/assets/common/head.jpg')
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    // ...mapState(['userInfo'])
+    ...mapState('user', ['userInfo'])
   }
 }
-</script>	  
+</script>
 
 <style lang="scss" scoped>
 .dashboard-container {
