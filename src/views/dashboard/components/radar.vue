@@ -11,6 +11,8 @@ require('echarts/lib/chart/radar') // 引入雷达图
 // 引入提示框和标题组件
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
+import { LegendComponent } from 'echarts/components'
+echarts.use([LegendComponent])
 
 export default {
   // 页面渲染完毕事件
@@ -44,21 +46,23 @@ export default {
           { name: '正确率', max: 100 }
         ]
       },
-      series: [{
-        name: '预算 vs 开销（Budget vs spending）',
-        type: 'radar',
-        // areaStyle: {normal: {}},
-        data: [
-          {
-            value: [10, 1, 100, 5, 100, 0],
-            name: '张三'
-          },
-          {
-            value: [50, 50, 50, 50, 50, 10],
-            name: '李四'
-          }
-        ]
-      }]
+      series: [
+        {
+          name: '预算 vs 开销（Budget vs spending）',
+          type: 'radar',
+          // areaStyle: {normal: {}},
+          data: [
+            {
+              value: [10, 1, 100, 5, 100, 0],
+              name: '张三'
+            },
+            {
+              value: [50, 50, 50, 50, 50, 10],
+              name: '李四'
+            }
+          ]
+        }
+      ]
     })
   }
 }
@@ -66,7 +70,7 @@ export default {
 
 <style>
 .radar-echart {
-    width: 600px;
-    height: 400px;
+  width: 600px;
+  height: 400px;
 }
 </style>
