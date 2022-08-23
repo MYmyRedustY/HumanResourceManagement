@@ -4,6 +4,8 @@
 import UploadExcel from './UploadExcel'
 import PageTools from './PageTool'
 import ImageUpload from './ImageUpload'
+import Print from 'vue-print-nb'
+import ScreenFull from './ScreenFull'
 export default {
   // 在main.js中, 使用Vue.use()方法的时候, 会自动调用install()
   // install方法是vue给我们提供的
@@ -13,7 +15,9 @@ export default {
     // Vue.component('组件名', 组件)
     Vue.component('PageTools', PageTools)
     Vue.component('UploadExcel', UploadExcel) // 注册导入excel组件
+    Vue.use(Print) // 注册导入上传组件
     Vue.component('ImageUpload', ImageUpload) // 注册导入上传组件
+    Vue.component('ScreenFull', ScreenFull) // 注册全屏组件
   }
 }
 // Vue.use()
