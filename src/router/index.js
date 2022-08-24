@@ -92,7 +92,8 @@ export const asyncRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
+  base:'hr', // 基地址，localhost:8888/hr/dashboard
   scrollBehavior: () => ({ y: 0 }),
   routes: [...constantRoutes] // 临时合并所有的路由
 })
